@@ -1,17 +1,22 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-black text-zinc-900 dark:text-zinc-50">
-      <header className="flex h-16 items-center justify-between px-6 lg:px-12 border-b border-zinc-200 dark:border-zinc-800">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-black font-bold">
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between px-6 lg:px-12 border-b border-zinc-200 bg-white/70 backdrop-blur-xl dark:border-zinc-800 dark:bg-[#0a0a0a]/70">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-emerald-500 text-white font-bold shadow-md shadow-indigo-500/20">
             H
           </div>
-          <span className="text-lg font-semibold tracking-tight">Hishabkitam</span>
+          <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 bg-clip-text text-transparent dark:from-white dark:to-zinc-400">
+            Hishabkitam
+          </span>
         </div>
         <nav className="flex items-center gap-4">
+          <ThemeToggle />
+          <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
           <Link href="/login" className="text-sm font-medium hover:text-zinc-600 dark:hover:text-zinc-300">
             Sign in
           </Link>
