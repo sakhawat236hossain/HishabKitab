@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-black text-zinc-900 dark:text-zinc-50">
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between px-6 lg:px-12 border-b border-zinc-200 bg-white/70 backdrop-blur-xl dark:border-zinc-800 dark:bg-[#0a0a0a]/70">
@@ -17,15 +21,26 @@ export default function Home() {
         <nav className="flex items-center gap-4">
           <ThemeToggle />
           <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
-          <Link href="/login" className="text-sm font-medium hover:text-zinc-600 dark:hover:text-zinc-300">
-            Sign in
-          </Link>
-          <Link
-            href="/register"
-            className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-          >
-            Get Started
-          </Link>
+          {session ? (
+            <Link
+              href="/dashboard"
+              className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm font-medium hover:text-zinc-600 dark:hover:text-zinc-300">
+                Sign in
+              </Link>
+              <Link
+                href="/register"
+                className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </nav>
       </header>
 
@@ -40,13 +55,23 @@ export default function Home() {
             A smart, beautiful, and intuitive way to build the routines that matter most to you. Fully automated and designed for focus.
           </p>
           <div className="flex items-center justify-center gap-4 pt-4">
-            <Link
-              href="/register"
-              className="group flex h-12 items-center justify-center gap-2 rounded-full bg-zinc-900 px-8 text-base font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-            >
-              Start Tracking Now
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            {session ? (
+              <Link
+                href="/dashboard"
+                className="group flex h-12 items-center justify-center gap-2 rounded-full bg-zinc-900 px-8 text-base font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+              >
+                Go to your Dashboard
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            ) : (
+              <Link
+                href="/register"
+                className="group flex h-12 items-center justify-center gap-2 rounded-full bg-zinc-900 px-8 text-base font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+              >
+                Start Tracking Now
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            )}
           </div>
         </div>
 
