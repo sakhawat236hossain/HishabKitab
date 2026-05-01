@@ -32,12 +32,12 @@ export function HabitGrid({ habits, logs, daysInMonth, onToggle }: HabitGridProp
   });
 
   return (
-    <div className="mt-8 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="mt-8 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-[#0a0a0a]">
       <div className="overflow-x-auto pb-4">
         <table className="w-full border-collapse text-left text-sm">
           <thead>
             <tr>
-              <th className="sticky left-0 z-20 min-w-[200px] border-b border-zinc-200 bg-zinc-50 px-4 py-4 font-medium text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/95 dark:text-zinc-400">
+              <th className="sticky left-0 z-20 min-w-[200px] border-b border-zinc-200 bg-zinc-50 px-4 py-4 font-semibold text-zinc-600 dark:border-zinc-800 dark:bg-[#121212] dark:text-zinc-300 shadow-[1px_0_0_0_#e4e4e7] dark:shadow-[1px_0_0_0_#27272a]">
                 Habits
               </th>
               {daysInMonth.map((day) => {
@@ -46,9 +46,9 @@ export function HabitGrid({ habits, logs, daysInMonth, onToggle }: HabitGridProp
                   <th
                     key={day.toISOString()}
                     className={clsx(
-                      "min-w-[48px] border-b border-zinc-200 px-2 py-4 text-center font-medium dark:border-zinc-800",
+                      "min-w-[48px] border-b border-zinc-200 px-2 py-4 text-center font-medium dark:border-zinc-800 transition-colors",
                       isDayToday
-                        ? "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
+                        ? "bg-indigo-50/50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400"
                         : "text-zinc-500 dark:text-zinc-400"
                     )}
                   >
@@ -67,8 +67,8 @@ export function HabitGrid({ habits, logs, daysInMonth, onToggle }: HabitGridProp
           </thead>
           <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
             {habits.map((habit) => (
-              <tr key={habit._id} className="group transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="sticky left-0 z-10 border-r border-zinc-200 bg-white px-4 py-3 font-medium text-zinc-900 group-hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:group-hover:bg-[#1f1f22]">
+              <tr key={habit._id} className="group transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30">
+                <td className="sticky left-0 z-10 border-r border-zinc-200 bg-white px-4 py-3 font-medium text-zinc-900 group-hover:bg-zinc-50 dark:border-zinc-800 dark:bg-[#0a0a0a] dark:text-zinc-100 dark:group-hover:bg-[#121212] shadow-[1px_0_0_0_#e4e4e7] dark:shadow-[1px_0_0_0_#27272a]">
                   {habit.title}
                 </td>
                 {daysInMonth.map((day) => {
@@ -82,12 +82,12 @@ export function HabitGrid({ habits, logs, daysInMonth, onToggle }: HabitGridProp
                         disabled={isFutureDate}
                         onClick={() => onToggle(habit._id, dateStr, !isCompleted)}
                         className={clsx(
-                          "mx-auto flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200",
+                          "mx-auto flex h-8 w-8 items-center justify-center rounded-[10px] border transition-all duration-300",
                           isFutureDate
-                            ? "cursor-not-allowed border-zinc-100 bg-zinc-50 opacity-50 dark:border-zinc-800 dark:bg-zinc-900/50"
+                            ? "cursor-not-allowed border-zinc-100 bg-zinc-50 opacity-50 dark:border-zinc-800/50 dark:bg-zinc-900/30"
                             : isCompleted
-                            ? "border-emerald-500 bg-emerald-500 text-white shadow-sm hover:bg-emerald-600 dark:border-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500"
-                            : "border-zinc-200 bg-white text-transparent hover:border-emerald-500/50 hover:bg-emerald-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500/50 dark:hover:bg-emerald-500/10"
+                            ? "border-transparent bg-gradient-to-tr from-emerald-400 to-teal-500 text-white shadow-[0_0_10px_rgba(52,211,153,0.4)] hover:shadow-[0_0_15px_rgba(52,211,153,0.6)] hover:scale-105"
+                            : "border-zinc-200 bg-zinc-50/50 text-transparent hover:border-emerald-400 hover:bg-emerald-50 dark:border-zinc-800 dark:bg-[#121212] dark:hover:border-emerald-500/50 dark:hover:bg-emerald-500/10"
                         )}
                       >
                         <Check className="h-4 w-4" strokeWidth={3} />
