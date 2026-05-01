@@ -3,6 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { LogOut, User as UserIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function DashboardLayout({
@@ -15,14 +16,14 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-50">
       <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-zinc-200 bg-white/70 px-4 backdrop-blur-xl dark:border-zinc-800 dark:bg-[#0a0a0a]/70 sm:px-6">
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-emerald-500 text-white font-bold shadow-md shadow-indigo-500/20">
             H
           </div>
           <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 bg-clip-text text-transparent dark:from-white dark:to-zinc-400">
             Hishabkitam
           </span>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-2 text-sm font-medium">
