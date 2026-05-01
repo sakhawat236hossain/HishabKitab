@@ -132,38 +132,38 @@ export default function DashboardPage() {
     <div className="animate-in fade-in duration-500">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-500 bg-clip-text text-transparent dark:from-white dark:to-zinc-500">
             Dashboard
           </h1>
-          <p className="text-zinc-500 dark:text-zinc-400 mt-1">
+          <p className="text-zinc-500 dark:text-zinc-400 mt-2 text-lg">
             Track your habits and achieve your goals.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white p-1 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex items-center gap-2 rounded-2xl border border-zinc-200 bg-white/50 p-1.5 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-[#0a0a0a]/50">
           <button
             onClick={handlePrevMonth}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           
-          <div className="flex h-8 items-center px-4 font-medium min-w-[140px] justify-center">
+          <div className="flex h-9 items-center px-4 font-semibold min-w-[150px] justify-center text-zinc-700 dark:text-zinc-200">
             {format(currentDate, "MMMM yyyy")}
           </div>
 
           <button
             onClick={handleNextMonth}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
 
-          <div className="mx-1 h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
+          <div className="mx-2 h-5 w-px bg-zinc-200 dark:bg-zinc-800" />
           
           <button
             onClick={handleToday}
-            className="flex h-8 items-center rounded-lg px-3 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
+            className="flex h-9 items-center rounded-xl px-4 text-sm font-semibold text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
           >
             Today
           </button>
