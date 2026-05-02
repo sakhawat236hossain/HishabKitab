@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hishabkitam
 
-## Getting Started
+`Hishabkitam` হলো একটি হাবিট ট্র্যাকিং ও প্রোগ্রেস মনিটরিং অ্যাপ, যা ব্যবহারকারীদের প্রতিদিনের রুটিন, লক্ষ্য এবং অভ্যাস গুলো ধরে রাখতে সাহায্য করে। এটি একটি সম্পূর্ণ Next.js  অ্যাপ যেটি React, NextAuth, MongoDB ও Tailwind CSS ব্যবহার করে তৈরি করা হয়েছে।
 
-First, run the development server:
+## কী সমস্যা সমাধান করে?
+
+- ব্যক্তিগত অভ্যাস ও রুটিন গুলোর দৈনন্দিন লোগ সংরক্ষণ করা।
+- ব্যবহারকারীর জন্য মাসিক ও দৈনিক অগ্রগতি দেখায়।
+- স্ট্রিক, পূর্ণ হওয়া ও অসম্পূর্ণ লক্ষ্য গুলোর উপর ভিত্তি করে দ্রুত ওয়ান-ভিউ ড্যাশবোর্ড দেয়।
+- নতুন ইউজারদের জন্য ডিফল্ট প্রোডাক্টিভিটি হ্যাবিটস দিয়ে দ্রুত শুরু করতে দেয়।
+
+## প্রধান ফিচার
+
+- ইউজার রেজিস্ট্রেশন ও লগইন (ক্রেডেনশিয়াল + Google OAuth)।
+- `dashboard` পেজে হ্যাবিট গ্রিড দেখানো এবং প্রতিদিন রেকর্ড টগল করা।
+- রিয়েল-টাইম অ্যানালিটিক্স কার্ড: মাসিক অগ্রগতি, দৈনন্দিন অগ্রগতি, বর্তমান স্ট্রিক, বাকি লক্ষ্য।
+- ডার্ক/লাইট থিম সাপোর্ট।
+- প্রিমিয়াম ডিজাইন: ডেটা টেবিল, স্লটার, স্পর্শকাতর UI, ফোন ও ডেস্কটপ সাপোর্ট।
+- Middleware ব্যবহার করে `/dashboard` রুট প্রোটেক্ট করা হয়েছে।
+
+## কীভাবে কাজ করে?
+
+### রুট লেআউট ও প্রোভাইডার
+
+- `app/layout.tsx` ফাইলটি অ্যাপের মূল লেআউট তৈরি করে এবং `ThemeProvider` ও `AuthProvider` র‌্যাপ করে।
+- `AuthProvider` `next-auth` এর `SessionProvider` ব্যবহার করে সেশন সক্রিয় করে।
+- `ThemeProvider` `next-themes` ব্যবহার করে লাইট/ডার্ক থিম পরিচালনা করে।
+
+### হোম পেজ
+
+- `app/page.tsx` হোম পেজ হিসেবে কাজ করে।
+- এখানে সাইন ইন না থাকলে লগইন ও রেজিস্টার লিঙ্ক দেখায়।
+- সেশন থাকলে ড্যাশবোর্ডে নেভিগেট করার বাটন দেখায়।
+
+### লগইন ও রেজিস্টার
+
+- `app/login/page.tsx` ফর্ম থেকে ব্যবহারকারী ইমেইল ও পাসওয়ার্ড দিয়ে লগইন করতে পারে।
+- Google সাইন-ইন বাটনও সরাসরি সাইনইন প্রোসেস শুরু করে।
+- `app/register/page.tsx` নতুন ইউজার তৈরি করে, তারপর স্বয়ংক্রিয়ভাবে লগইন করে।
+
+### Authentication logic
+
+- `app/api/auth/[...nextauth]/route.ts` ফাইলে `NextAuth` সেটআপ করা হয়েছে।
+- Google OAuth ও ক্রেডেনশিয়াল প্রোভাইডার ব্যবহৃত হয়েছে।
+- ক্রেডেনশিয়াল লগইনে `bcryptjs` দিয়ে পাসওয়ার্ড চেক করা হয়।
+- Google সাইন-ইনের সময় নতুন ইউজার তৈরি করলে ডিফল্ট হ্যাবিট সিড করা হয়।
+- JWT সেশন স্ট্র্যাটেজি ব্যবহার করা হয়েছে, যাতে `session.user.id` সঠিকভাবে পাওয়া যায়।
+
+### রেজিস্টার API
+
+- `app/api/auth/register/route.ts` নতুন ব্যবহারকারী সাইন-আপ হ্যান্ডেল করে।
+- পাসওয়ার্ড `bcrypt.hash` দিয়ে হ্যাশ করে ডাটাবেসে সেভ করে।
+- সাইন-আপের পর `seedDefaultHabits` কল করে নতুন ইউজারের জন্য ডিফল্ট হ্যাবিট সেগুলি তৈরি করা হয়।
+
+### ড্যাশবোর্ড ও গ্রিড
+
+- `app/dashboard/page.tsx` ইউজারের ড্যাশবোর্ড দেখায়।
+- এটি `useSession` দিয়ে সেশন চেক করে, অাইন-আউথেনটিকেটেড হলে `/login` এ রিডাইরেক্ট।
+- ড্যাশবোর্ডে:
+  - `AnalyticsCards` কম্পোনেন্ট সাফল্য মূল্যায়ন দেখায়।
+  - `HabitGrid` হ্যাবিট ও তার প্রতিদিনের স্ট্যাটাস দেখায়।
+- গ্রিডে প্রতিটি দিন টগল করলে `POST /api/logs` রিকোয়েস্ট পাঠায় এবং লোকাল স্টেট আপডেট করে।
+
+### API রুট
+
+- `app/api/habits/route.ts` ইউজারের সমস্ত হ্যাবিট রিটার্ন করে।
+- `app/api/logs/route.ts`:
+  - `GET` হ্যাবিট লগস ফেচ করে একটি নির্দিষ্ট মাসের জন্য।
+  - `POST` একটি নির্দিষ্ট হ্যাবিটকে নির্দিষ্ট তারিখে সম্পন্ন বা অসম্পন্ন হিসেবে আপডেট করে।
+- `app/api/analytics/route.ts`:
+  - মাসিক অগ্রগতি, দৈনিক অগ্রগতি ও স্ট্রিক গণনা করে।
+  - ডেটা ভিত্তিক হিসেব করে `totalGoalsCompleted`, `monthlyProgress`, `dailyProgress`, `currentStreak` ইত্যাদি প্রদান করে।
+
+### ডাটাবেস মডেল
+
+- `models/User.ts`: ব্যবহারকারীর তথ্য, ইমেইল, পাসওয়ার্ড, ইমেজ।
+- `models/Habit.ts`: প্রতিটি হ্যাবিটের টাইটেল, টার্গেট দিন, ব্যবহারকারী রেফারেন্স।
+- `models/HabitLog.ts`: প্রতিটি হ্যাবিটের তারিখভিত্তিক লগ, সম্পন্ন বা অসম্পন্ন স্ট্যাটাস।
+- `HabitLog`-এ `date` একটি `YYYY-MM-DD` স্ট্রিং হিসেবে রাখা হয়।
+
+### ডাটাবেস সংযোগ
+
+- `lib/mongodb.ts` MongoDB URI থেকে সংযোগ সেটআপ করে।
+- ডেভেলপমেন্টে হট রিলোডের সময় সংযোগ ক্যাশ করে রাখা হয় যাতে প্রতিবার পুনরায় তৈরি না হয়।
+- `.env.local`-এ `MONGODB_URI`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `NEXTAUTH_SECRET` প্রয়োজন।
+
+### ডিফল্ট হ্যাবিট সিডিং
+
+- `lib/seedHabits.ts` নতুন ইউজারের জন্য সম্ভাব্য প্রোডাক্টিভিটি লক্ষ্যগুলোর ডিফল্ট তালিকা সিড করে।
+- এতে রয়েছে: কাজের আবেদন, গিটহাব কমিট, সকালবেলা ওঠা, পানি পান, ব্যায়াম, পড়াশোনা এবং ধ্যান।
+
+## প্রযুক্তি স্ট্যাক
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- NextAuth.js
+- MongoDB + Mongoose
+- bcryptjs
+- next-themes
+- date-fns
+- lucide-react
+
+## রান করার নিয়ম
+
+1. রিপোজিটরি ক্লোন করুন বা এই প্রজেক্টের ডিরেক্টরিতে যান।
+2. `npm install` চালান।
+3. `.env.local` তৈরি করুন ও প্রয়োজনীয় ভেরিয়েবল দিন:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+NEXTAUTH_SECRET=your_nextauth_secret
+```
+
+4. ডেভ সেবা চালু করুন:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. ব্রাউজারে `http://localhost:3000` খুলুন।
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## বিশেষ নোট
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `middleware.ts` শুধুমাত্র `/dashboard` রুটের অ্যাক্সেস প্রোটেক্ট করে।
+- কোডে কোনো পরিবর্তন করা হয়নি; README ফাইল তৈরি ও লিখা হয়েছে শুধুমাত্র আপনার অনুরোধ অনুযায়ী।
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## আপনার প্রোজেক্টের সারাংশ
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`Hishabkitam` মূলত একটি হাবিট কিপিং, অ্যানালাইসিস ও ডেইলি প্রগ্রেস ট্র্যাকিং সিস্টেম। এটি ব্যবহারকারীদের প্রতিদিনের কার্যকলাপ ইউনিফাই করে, একটি সুন্দর ড্যাশবোর্ডের মাধ্যমে স্ট্যাটাস প্রদর্শন করে এবং অটোমেটিক ডিফল্ট হ্যাবিট সিডিং দেয় যাতে নতুন ব্যবহারকারী দ্রুত শুরু করতে পারে।
